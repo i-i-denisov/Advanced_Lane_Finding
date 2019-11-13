@@ -52,17 +52,17 @@ if out.isOpened():
             #if config.frame_number > 600:
              # break
             # problem_image=frame
-            if (config.frame_number >= 0) & (config.frame_number < 100) & (config.frame_number != 4):
-                processed_frame, left_line, right_line = functions.process_image(frame, left_line, right_line, config.interp_len)
-                processed_frames += 1
-                #cv2.imwrite("./extracted_images/challenge"+str(config.frame_number)+'.jpg', frame)
-                out.write(processed_frame)
+            #if (config.frame_number >= 0) & (config.frame_number < 100) & (config.frame_number != 4):
+            processed_frame, left_line, right_line = functions.process_image(frame, left_line, right_line, config.interp_len)
+            processed_frames += 1
+            #cv2.imwrite("./extracted_images/challenge"+str(config.frame_number)+'.jpg', frame)
+            out.write(processed_frame)
             # debug
-            if config.frame_number == 4 :
-                processed_frame, left_line, right_line = functions.process_image(frame, left_line, right_line, config.interp_len, visualise=True)
-                problem_image = frame
-                out.write (processed_frame)
-                processed_frames += 1
+            #if config.frame_number == 4 :
+            #    processed_frame, left_line, right_line = functions.process_image(frame, left_line, right_line, config.interp_len, visualise=True)
+            #    problem_image = frame
+            #    out.write (processed_frame)
+            #    processed_frames += 1
             config.frame_number += 1
 cap.release()
 out.release()
@@ -76,13 +76,4 @@ output = open(line_pickle, 'wb')
 pickle.dump({"left_line": left_line, "right_line": right_line}, output, 2)
 output.close()
 
-# print (left_line.recent_fits)
-# print (right_line.recent_fits)
-# drawing original image and processed image
-# f, (ax1, ax2) = plt.subplots(1, 2, figsize=(24, 9))
-# f.tight_layout()
-# ax1.imshow(frame)
-# ax1.set_title('Original image', fontsize=50)
-# ax2.imshow(processed_frame)
-# ax2.set_title('Undistorted and Warped Image', fontsize=50)
-# plt.subplots_adjust(left=0., right=1, top=0.9, bottom=0.)
+

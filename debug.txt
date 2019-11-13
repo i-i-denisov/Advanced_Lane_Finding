@@ -198,3 +198,139 @@
 98polyfit successful
 99 doing around poly fit
 99polyfit successful
+100 doing around poly fit
+100polyfit successful
+101 doing around poly fit
+101polyfit successful
+102 doing around poly fit
+102polyfit successful
+103 doing around poly fit
+103polyfit successful
+104 doing around poly fit
+104polyfit successful
+105 doing around poly fit
+105polyfit successful
+106 doing around poly fit
+106polyfit successful
+107 doing around poly fit
+107polyfit successful
+108 doing around poly fit
+108polyfit successful
+109 doing around poly fit
+109polyfit successful
+110 doing around poly fit
+110polyfit successful
+111 doing around poly fit
+111polyfit successful
+112 doing around poly fit
+112polyfit successful
+113 doing around poly fit
+113polyfit successful
+114 doing around poly fit
+114polyfit successful
+115 doing around poly fit
+115polyfit successful
+116 doing around poly fit
+116polyfit successful
+117 doing around poly fit
+117polyfit successful
+118 doing around poly fit
+118polyfit successful
+119 doing around poly fit
+119polyfit successful
+120 doing around poly fit
+120polyfit successful
+121 doing around poly fit
+121polyfit successful
+122 doing around poly fit
+122polyfit successful
+123 doing around poly fit
+123polyfit successful
+124 doing around poly fit
+124polyfit successful
+125 doing around poly fit
+125polyfit successful
+126 doing around poly fit
+126polyfit successful
+127 doing around poly fit
+127polyfit successful
+128 doing around poly fit
+128polyfit successful
+129 doing around poly fit
+129polyfit successful
+130 doing around poly fit
+130polyfit successful
+131 doing around poly fit
+131polyfit successful
+132 doing around poly fit
+132polyfit successful
+133 doing around poly fit
+133polyfit successful
+134 doing around poly fit
+134polyfit successful
+135 doing around poly fit
+135polyfit successful
+136 doing around poly fit
+136polyfit successful
+137 doing around poly fit
+137polyfit successful
+138 doing around poly fit
+138polyfit successful
+139 doing around poly fit
+139polyfit successful
+140 doing around poly fit
+140polyfit successful
+141 doing around poly fit
+141polyfit successful
+142 doing around poly fit
+142polyfit successful
+143 doing around poly fit
+143polyfit successful
+144 doing around poly fit
+144polyfit successful
+145 doing around poly fit
+145polyfit successful
+146 doing around poly fit
+146polyfit successful
+147 doing around poly fit
+147polyfit successful
+148 doing around poly fit
+148polyfit successful
+149 doing around poly fit
+149polyfit successful
+150 doing around poly fit
+150polyfit successful
+151 doing around poly fit
+151polyfit successful
+152 doing around poly fit
+152polyfit successful
+153 doing around poly fit
+153polyfit successful
+154 doing around poly fit
+154polyfit successful
+155 doing around poly fit
+155polyfit successful
+156 doing around poly fit
+156polyfit successful
+157 doing around poly fit
+157polyfit successful
+158 doing around poly fit
+158polyfit successful
+159 doing around poly fit
+159polyfit successful
+160 doing around poly fit
+160polyfit successful
+161 doing around poly fit
+161polyfit successful
+162 doing around poly fit
+162polyfit successful
+163 doing around poly fit
+163polyfit successful
+163 around poly sanity check failed,doing sliding window
+163polyfit successful
+164 doing sliding window
+164polyfit successful
+165 doing sliding window
+165polyfit successful
+166 doing around poly fit
+166polyfit successful
