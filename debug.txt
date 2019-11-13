@@ -326,11 +326,12 @@
 162polyfit successful
 163 doing around poly fit
 163polyfit successful
-163 around poly sanity check failed,doing sliding window
-163polyfit successful
-164 doing sliding window
+164 doing around poly fit
 164polyfit successful
-165 doing sliding window
+165 doing around poly fit
 165polyfit successful
 166 doing around poly fit
 166polyfit successful
+167 doing around poly fit
+167polyfit successful
+168 doing around poly fit

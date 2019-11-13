@@ -409,8 +409,10 @@ def sanity_check(left_line, right_line):
             print("Sanity check failed, Frame ", config.frame_number, ". Distance between lines too big\small. Max Distance ",
                   max_dist, " Min distance ", min_dist)
             return left_line, right_line
+        #checking if lines are well-bound
+        well_bound=(max_dist < 610) & (min_dist > 500)
         #checking that lines have similar curvature
-        if ((a > 10) | (a < 0.1) | (b > 10) | (b < 0.1)) :
+        if ((a > 10) | (a < 0.1) | (b > 10) | (b < 0.1)) & (not well_bound) :
             left_line.detected = False
             right_line.detected = False
             print(
@@ -418,11 +420,8 @@ def sanity_check(left_line, right_line):
                 left_line.current_fit,
                 " Right_line ", right_line.current_fit)
             print(max_dist, min_dist)
-            # of lines are well-bound then fit parameters are not so important,
+            # If lines are well-bound then fit parameters are not so important,
             # e.g. a parameters have different sign but both lines are close to straight - this is good line detection
-        if (max_dist < 600) & (min_dist > 500):
-            left_line.detected = True
-            right_line.detected = True
     # if all sanity checks passed then reassign best fit
     if left_line.detected & right_line.detected:
         left_line.best_fit = left_line.current_fit
