@@ -105,7 +105,7 @@ def layer_threshold(image, kernel_size=3, thresh=(0, 255)):
 def dir_threshold(image, sobel_kernel=3, thresh=(0, np.pi / 2)):
     # Grayscale
     # keeping in mind that we will pass L-channel or grayscale image
-    # gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+
     gray = np.copy(image)
     # Calculate the x and y gradients
     sobelx = cv2.Sobel(gray, cv2.CV_64F, 1, 0, ksize=sobel_kernel)
@@ -117,8 +117,7 @@ def dir_threshold(image, sobel_kernel=3, thresh=(0, np.pi / 2)):
     sobel_binary_dir[(absgraddir >= thresh[0]) & (absgraddir <= thresh[1])] = 1
     # Return the bina
     return sobel_binary_dir
-    # graphics_grad_dir=np.uint8(absgraddir/(np.pi/2)*255)
-    # return graphics_grad_dir
+
 
 def sliding_window(binary_warped, right_line, left_line):
     # HYPERPARAMETERS
@@ -160,7 +159,7 @@ def sliding_window(binary_warped, right_line, left_line):
         # Identify window boundaries in x and y (and right and left)
         win_y_low = binary_warped.shape[0] - (window + 1) * window_height
         win_y_high = binary_warped.shape[0] - window * window_height
-        ### TO-DO: Find the four below boundaries of the window ###
+        ###  Find the four below boundaries of the window ###
         win_xleft_low = leftx_current - config.margin
         win_xleft_high = leftx_current + config.margin
         win_xright_low = rightx_current - config.margin
@@ -172,7 +171,7 @@ def sliding_window(binary_warped, right_line, left_line):
         cv2.rectangle(out_img, (win_xright_low, win_y_low),
                       (win_xright_high, win_y_high), (0, 255, 0), 2)
 
-        ### TO-DO: Identify the nonzero pixels in x and y within the window ###
+        ###  Identify the nonzero pixels in x and y within the window ###
         good_left_inds = ((nonzeroy >= win_y_low) & (nonzeroy < win_y_high) &
                           (nonzerox >= win_xleft_low) & (nonzerox < win_xleft_high)).nonzero()[0]
         # print (type(good_left_inds))
@@ -299,7 +298,7 @@ def fit_poly(img_shape, left_line, right_line):
         right_line.current_fit = [np.array([False])]
         return left_line, right_line
 
-    # I am not sure if I need this!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
     ###visualisation
     # Generate x and y values for plotting
     left_fit_coefs = left_line.current_fit
@@ -320,9 +319,7 @@ def fit_poly(img_shape, left_line, right_line):
         left_line.current_fit = [np.array([False])]
         right_line.current_fit = [np.array([False])]
         return left_line, right_line
-    #    left_fitx = np.uint16(1*left_line.ploty**2 + 1*left_line.ploty)
-    #    right_fitx = np.uint16(1*right_line.ploty**2 + 1*right_line.ploty)
-    #    #cv2.putText(out_img, config.error_poly_cant_fit ,(10,10), font, 1,(0,0,255),2,cv2.LINE_AA)
+
     # checking poly fit calculations fit to image boundaries
     left_line.fitx[left_line.fitx > (img_shape[1] - 1)] = img_shape[1] - 1
     right_line.fitx[right_line.fitx > (img_shape[1] - 1)] = img_shape[1] - 1
@@ -353,24 +350,12 @@ def search_around_poly(binary_warped, left_line, right_line):
                        right_fit_coefs[2] - margin) & (
                               nonzerox <= right_fit_coefs[0] * (nonzeroy ** 2) + right_fit_coefs[1] * nonzeroy +
                               right_fit_coefs[2] + margin)
-    # print (left_lane_inds)
+
     # Again, extract left and right line pixel positions
     left_line.allx = nonzerox[left_lane_inds]
     left_line.ally = nonzeroy[left_lane_inds]
     right_line.allx = nonzerox[right_lane_inds]
     right_line.ally = nonzeroy[right_lane_inds]
-    # leftx = nonzerox[left_lane_inds]
-    # lefty = nonzeroy[left_lane_inds]
-    # rightx = nonzerox[right_lane_inds]
-    # righty = nonzeroy[right_lane_inds]
-
-    # to delete
-    # Fit new polynomials
-    # try:
-    #    left_fitx, right_fitx, ploty,left_fit_coefs,right_fit_coefs = fit_poly(binary_warped.shape, leftx, lefty, rightx, righty)
-    # except TypeError:
-    # leftx, lefty not defined or poly could not fit
-    #    print("leftx, lefty not defined or poly could not fit")
 
     ## Visualization ##
     # Create an image to draw on and an image to show the selection window
@@ -405,23 +390,29 @@ def search_around_poly(binary_warped, left_line, right_line):
     return result, left_line, right_line
 
 def sanity_check(left_line, right_line):
-    ### TODO: Add line sanity check they are close to parallel, distance between is in order of lane width, similar curvature
-    # print (left_line.current_fit,right_line.current_fit)
+    #proceed only if current_fit arrays are well-defined
+    #TODO can be substituted for try - exeption
     if (len(left_line.current_fit) == 3) & (len(right_line.current_fit) == 3):
+        #presumtion of sanity
         left_line.detected = True
         right_line.detected = True
-
+        #maximal and minimal distance between lines
         max_dist = np.amax(right_line.fitx - left_line.fitx)
         min_dist = np.amin(right_line.fitx - left_line.fitx)
+        #order of difference between corresponding fit parameters of left and right line
         a = left_line.current_fit[0] / right_line.current_fit[0]
         b = left_line.current_fit[1] / right_line.current_fit[1]
+        #checking that lines do not come to close or too far from each other
         if (max_dist > 750) | (min_dist < 370):
             left_line.detected = False
             right_line.detected = False
             print("Sanity check failed, Frame ", config.frame_number, ". Distance between lines too big\small. Max Distance ",
                   max_dist, " Min distance ", min_dist)
             return left_line, right_line
-        if ((a > 10) | (a < 0.1) | (b > 10) | (b < 0.1)) & (max_dist > 650) & (min_dist < 550):
+        #checking if lines are well-bound
+        well_bound=(max_dist < 610) & (min_dist > 500)
+        #checking that lines have similar curvature
+        if ((a > 10) | (a < 0.1) | (b > 10) | (b < 0.1)) & (not well_bound) :
             left_line.detected = False
             right_line.detected = False
             print(
@@ -429,10 +420,8 @@ def sanity_check(left_line, right_line):
                 left_line.current_fit,
                 " Right_line ", right_line.current_fit)
             print(max_dist, min_dist)
-            # if all sanity checks passed then reassign best fit
-        if (max_dist < 600) & (min_dist > 500):
-            left_line.detected = True
-            right_line.detected = True
+            # If lines are well-bound then fit parameters are not so important,
+            # e.g. a parameters have different sign but both lines are close to straight - this is good line detection
     # if all sanity checks passed then reassign best fit
     if left_line.detected & right_line.detected:
         left_line.best_fit = left_line.current_fit
@@ -477,8 +466,6 @@ def process_image(image, left_line, right_line, interp_len, visualise=False):
     # blur_HSL = cv2.GaussianBlur(HSL,(kernel_size, kernel_size),0)
 
     # calculating defferent thresholds to L-channel of image
-    l_gradx = abs_sobel_thresh(l_channel, orient='x', sobel_kernel=kernel_size, thresh=(40, 150))
-    l_grady = abs_sobel_thresh(l_channel, orient='y', sobel_kernel=kernel_size, thresh=(0, 40))
     l_mag_binary = mag_thresh(l_channel, sobel_kernel=9, thresh=config.l_mag_threshold)
     l_dir_binary = dir_threshold(l_channel, sobel_kernel=15, thresh=(0, 1.3))
     # get simple s-layer threshold
@@ -488,14 +475,13 @@ def process_image(image, left_line, right_line, interp_len, visualise=False):
     # get sobel thresholds for s-channel
     # calculating defferent thresholds to L-channel of image
     s_gradx = abs_sobel_thresh(s_channel, orient='x', sobel_kernel=kernel_size, thresh=(30, 150))
-    s_grady = abs_sobel_thresh(s_channel, orient='y', sobel_kernel=kernel_size, thresh=(70, 150))
     s_mag_binary = mag_thresh(s_channel, sobel_kernel=9, thresh=(20, 100))
     s_dir_binary = dir_threshold(s_channel, sobel_kernel=15, thresh=(0, 1.3))
     s_mag_and_dir_binary = s_mag_binary & s_dir_binary
     # Stack s-channel and sobel magnitude\direction images to view their individual contributions in green and blue respectively
     # This returns a stack of the two binary images, whose components you can see as different colors
     color_binary = np.dstack(
-        ((s_mag_binary & s_dir_binary) | s_gradx, shadow_area, (l_mag_binary & l_dir_binary))) * 255
+        ((s_mag_binary & s_dir_binary) |s_gradx, shadow_area, (l_mag_binary & l_dir_binary))) * 255
     # Combine the two binary thresholds
     combined_binary = np.zeros_like(l_channel)
     combined_binary[((s_binary == 1) | (((s_mag_binary == 1) & (s_dir_binary == 1)) | (s_gradx == 1)) | (
@@ -504,14 +490,8 @@ def process_image(image, left_line, right_line, interp_len, visualise=False):
     # warping image using transformation matrix M
     binary_warped = cv2.warpPerspective(combined_binary, config.M, (imshape[1], imshape[0]), flags=cv2.INTER_LINEAR)
     color_warped = cv2.warpPerspective(color_binary, config.M, (imshape[1], imshape[0]), flags=cv2.INTER_LINEAR)
-    # drawing calibration lines on warped image
-    # cv2.line(warped, (350, 0), (350, 720), color=[0, 0, 255], thickness=2)
-    # cv2.line(warped, (910, 0), (910, 720), color=[0, 0, 255], thickness=2)
-
-    cv2.imwrite("combined_binary.jpg",color_binary)
 
     warped_lines_drawn, left_line, right_line = find_lines(binary_warped, left_line, right_line)
-
     if visualise:
         S_L_channels, (ax1, ax2) = plt.subplots(1, 2, figsize=(24, 9))
         S_L_channels.tight_layout()
@@ -549,15 +529,9 @@ def process_image(image, left_line, right_line, interp_len, visualise=False):
 
     #left_R_curve = left_line.rad_curv
     #right_R_curve = right_line.rad_curv
+    #every  Nth frame calculating mean curvature radius
     if config.frame_number % config.avg_curv_frames ==0:
         config.curv=avg_curv(left_line,right_line,config.avg_curv_frames)
-
-    # left_curverad = ((1+(2*left_fit_coefs[0]*y_eval+left_fit_coefs[1])**2)**1.5)/(2*np.abs(left_fit_coefs[0]))
-    # right_curverad = ((1+(2*right_fit_coefs[0]*y_eval+right_fit_coefs[1])**2)**1.5)/(2*np.abs(right_fit_coefs[0]))
-
-    # print ("Curvature",left_R_curve,' m',right_R_curve, ' m')
-
-    # print ("Offset",offset," m")
 
     # applying line coefs smoothing using bicubic spline for each coefficient in x = a*y**2+b*y+c representation
     if (len(left_line.good_frames) > 5):
@@ -593,7 +567,7 @@ def process_image(image, left_line, right_line, interp_len, visualise=False):
         left_fit_coefs = left_line.best_fit
         right_fit_coefs = right_line.best_fit
 
-    ####TODO add error handling if line not detected
+
     if left_line.detected & right_line.detected:
         #workaround to disable smoothing if line is properly detedcted
         left_fit_coefs = left_line.current_fit
