@@ -477,8 +477,6 @@ def process_image(image, left_line, right_line, interp_len, visualise=False):
     # blur_HSL = cv2.GaussianBlur(HSL,(kernel_size, kernel_size),0)
 
     # calculating defferent thresholds to L-channel of image
-    l_gradx = abs_sobel_thresh(l_channel, orient='x', sobel_kernel=kernel_size, thresh=(40, 150))
-    l_grady = abs_sobel_thresh(l_channel, orient='y', sobel_kernel=kernel_size, thresh=(0, 40))
     l_mag_binary = mag_thresh(l_channel, sobel_kernel=9, thresh=config.l_mag_threshold)
     l_dir_binary = dir_threshold(l_channel, sobel_kernel=15, thresh=(0, 1.3))
     # get simple s-layer threshold
@@ -488,14 +486,13 @@ def process_image(image, left_line, right_line, interp_len, visualise=False):
     # get sobel thresholds for s-channel
     # calculating defferent thresholds to L-channel of image
     s_gradx = abs_sobel_thresh(s_channel, orient='x', sobel_kernel=kernel_size, thresh=(30, 150))
-    s_grady = abs_sobel_thresh(s_channel, orient='y', sobel_kernel=kernel_size, thresh=(70, 150))
     s_mag_binary = mag_thresh(s_channel, sobel_kernel=9, thresh=(20, 100))
     s_dir_binary = dir_threshold(s_channel, sobel_kernel=15, thresh=(0, 1.3))
     s_mag_and_dir_binary = s_mag_binary & s_dir_binary
     # Stack s-channel and sobel magnitude\direction images to view their individual contributions in green and blue respectively
     # This returns a stack of the two binary images, whose components you can see as different colors
     color_binary = np.dstack(
-        ((s_mag_binary & s_dir_binary) | s_gradx, shadow_area, (l_mag_binary & l_dir_binary))) * 255
+        ((s_mag_binary & s_dir_binary) |s_gradx, shadow_area, (l_mag_binary & l_dir_binary))) * 255
     # Combine the two binary thresholds
     combined_binary = np.zeros_like(l_channel)
     combined_binary[((s_binary == 1) | (((s_mag_binary == 1) & (s_dir_binary == 1)) | (s_gradx == 1)) | (
@@ -507,11 +504,11 @@ def process_image(image, left_line, right_line, interp_len, visualise=False):
     # drawing calibration lines on warped image
     # cv2.line(warped, (350, 0), (350, 720), color=[0, 0, 255], thickness=2)
     # cv2.line(warped, (910, 0), (910, 720), color=[0, 0, 255], thickness=2)
-
-    cv2.imwrite("combined_binary.jpg",color_binary)
+    #color_binary=np.dstack((combined_binary,combined_binary,combined_binary))*255
+    #cv2.imwrite("combined_binary.jpg",color_binary)
 
     warped_lines_drawn, left_line, right_line = find_lines(binary_warped, left_line, right_line)
-
+    cv2.imwrite("warped_lines_drawn.jpg",warped_lines_drawn)
     if visualise:
         S_L_channels, (ax1, ax2) = plt.subplots(1, 2, figsize=(24, 9))
         S_L_channels.tight_layout()
@@ -549,15 +546,9 @@ def process_image(image, left_line, right_line, interp_len, visualise=False):
 
     #left_R_curve = left_line.rad_curv
     #right_R_curve = right_line.rad_curv
+    #every  Nth frame calculating mean curvature radius
     if config.frame_number % config.avg_curv_frames ==0:
         config.curv=avg_curv(left_line,right_line,config.avg_curv_frames)
-
-    # left_curverad = ((1+(2*left_fit_coefs[0]*y_eval+left_fit_coefs[1])**2)**1.5)/(2*np.abs(left_fit_coefs[0]))
-    # right_curverad = ((1+(2*right_fit_coefs[0]*y_eval+right_fit_coefs[1])**2)**1.5)/(2*np.abs(right_fit_coefs[0]))
-
-    # print ("Curvature",left_R_curve,' m',right_R_curve, ' m')
-
-    # print ("Offset",offset," m")
 
     # applying line coefs smoothing using bicubic spline for each coefficient in x = a*y**2+b*y+c representation
     if (len(left_line.good_frames) > 5):
@@ -593,7 +584,7 @@ def process_image(image, left_line, right_line, interp_len, visualise=False):
         left_fit_coefs = left_line.best_fit
         right_fit_coefs = right_line.best_fit
 
-    ####TODO add error handling if line not detected
+
     if left_line.detected & right_line.detected:
         #workaround to disable smoothing if line is properly detedcted
         left_fit_coefs = left_line.current_fit

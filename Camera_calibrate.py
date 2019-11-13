@@ -19,8 +19,9 @@ def camera_calibrate(cal_images_path='./camera_cal/calibration*.jpg', nx=9, ny=6
     imgpoints = []  # 2d points on image
     # defining object used for calibration
     objp = np.zeros(((nx) * (ny), 3), np.float32)
-    objp[:, :2] = np.mgrid[0:nx, 0:ny].T.reshape(-1,
-                                                 2)  # fill x,y coords with values 0,0; 1,0; ...; 6,5;7,5 corresponding to chessboard corners, z-coord is zero as our object used for calibration is flat chessboard
+    # fill x,y coords with values 0,0; 1,0; ...; 6,5;7,5
+    # corresponding to chessboard corners, z-coord is zero as our object used for calibration is flat chessboard
+    objp[:, :2] = np.mgrid[0:nx, 0:ny].T.reshape(-1,2)
     # number of successfuly processed calibration images
     good_cal_images = 0
     # loop through calibration images
