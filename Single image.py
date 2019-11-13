@@ -36,7 +36,7 @@ filename = "debug.txt"
 # Open the file with writing permission
 myfile = open(filename, 'w')
 # reading image
-img = mpimg.imread('.\extracted_images\project553.jpg')
+img = mpimg.imread('.\extracted_images\project1023.jpg')
 
 # processing image
 output, left_line, right_line = functions.process_image(img, left_line, right_line,config.interp_len, True)

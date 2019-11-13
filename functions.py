@@ -245,7 +245,7 @@ def find_lines(binary_warped, left_line, right_line):
         out_img, left_line, right_line = sliding_window(binary_warped, left_line, right_line)
         left_line, right_line = fit_poly(binary_warped.shape, left_line, right_line)
 
-    # TODO rewrite after sanity check is implemented
+
     left_line, right_line = sanity_check(left_line, right_line)
 
     ## Visualization ##
@@ -400,8 +400,8 @@ def sanity_check(left_line, right_line):
         max_dist = np.amax(right_line.fitx - left_line.fitx)
         min_dist = np.amin(right_line.fitx - left_line.fitx)
         #order of difference between corresponding fit parameters of left and right line
-        a = left_line.current_fit[0] / right_line.current_fit[0]
-        b = left_line.current_fit[1] / right_line.current_fit[1]
+        a = (left_line.current_fit[0] / right_line.current_fit[0])
+        b = (left_line.current_fit[1] / right_line.current_fit[1])
         #checking that lines do not come to close or too far from each other
         if (max_dist > 750) | (min_dist < 370):
             left_line.detected = False
@@ -410,7 +410,8 @@ def sanity_check(left_line, right_line):
                   max_dist, " Min distance ", min_dist)
             return left_line, right_line
         #checking if lines are well-bound
-        well_bound=(max_dist < 700) & (min_dist > 500)
+        #well_bound=(max_dist < 700) & (min_dist > 500)
+        well_bound=(max_dist-min_dist)<200
         #checking that lines have similar curvature
         if ((a > 10) | (a < 0.1) | (b > 10) | (b < 0.1)) & (not well_bound) :
             left_line.detected = False
@@ -469,22 +470,22 @@ def process_image(image, left_line, right_line, interp_len, visualise=False):
     l_mag_binary = mag_thresh(l_channel, sobel_kernel=9, thresh=config.l_mag_threshold)
     l_dir_binary = dir_threshold(l_channel, sobel_kernel=15, thresh=(0, 1.3))
     # get simple s-layer threshold
-    s_binary = layer_threshold(s_channel, kernel_size=kernel_size, thresh=(160, 254))
+    s_binary = layer_threshold(s_channel, kernel_size=kernel_size, thresh=(100, 254))
     # get dark shadows area to exclude them from s-channel thresholding as regions with possible problems of detection
     shadow_area = layer_threshold(l_channel, kernel_size=kernel_size, thresh=config.shadow_threshold)
     # get sobel thresholds for s-channel
     # calculating defferent thresholds to L-channel of image
     s_gradx = abs_sobel_thresh(s_channel, orient='x', sobel_kernel=kernel_size, thresh=(30, 150))
-    s_mag_binary = mag_thresh(s_channel, sobel_kernel=9, thresh=(20, 100))
+    s_mag_binary = mag_thresh(s_channel, sobel_kernel=9, thresh=(30, 100))
     s_dir_binary = dir_threshold(s_channel, sobel_kernel=15, thresh=(0, 1.3))
     s_mag_and_dir_binary = s_mag_binary & s_dir_binary
     # Stack s-channel and sobel magnitude\direction images to view their individual contributions in green and blue respectively
     # This returns a stack of the two binary images, whose components you can see as different colors
     color_binary = np.dstack(
-        ((s_mag_binary & s_dir_binary) |s_gradx, shadow_area, (l_mag_binary & l_dir_binary))) * 255
+        ((s_mag_binary & s_dir_binary) , shadow_area, (l_mag_binary & l_dir_binary))) * 255
     # Combine the two binary thresholds
     combined_binary = np.zeros_like(l_channel)
-    combined_binary[((s_binary == 1) | (((s_mag_binary == 1) & (s_dir_binary == 1)) | (s_gradx == 1)) | (
+    combined_binary[((s_binary == 1) | (((s_mag_binary == 1) & (s_dir_binary == 1)) ) | (
             (l_mag_binary == 1) & (l_dir_binary == 1))) & (shadow_area == 0)] = 1
 
     # warping image using transformation matrix M

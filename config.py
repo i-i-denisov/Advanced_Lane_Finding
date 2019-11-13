@@ -30,7 +30,7 @@ Minv = cv2.getPerspectiveTransform(dst, src)
 frame_number=0
 #image processing thresholds
 shadow_threshold=(0,30)
-l_mag_threshold=(70,200)
+l_mag_threshold=(50,200)
 #sliding window config
 nwindows = 9
 # Choose the number of sliding windows

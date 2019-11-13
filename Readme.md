@@ -68,11 +68,11 @@ First step in image processing is distortion correction, in my pipeline I do it 
 
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 
-I processed image converted to HSL colorspace. I combined magnitude and direction thresholds for L -layer, simple S-layer thresholding, magnitude and direction thresholds for S-layer and threshold for partial derivative along x-axis for S-layer  using functions `mag_thresh`, `dir_threshold`, `abs_sobel_thresh` and `layer_threshold` defined in `functions.py`. Also I masked out shadowed image parts with L-value less than `30` as not reliable sources for thresholding using `layer_threshold` function.
+I processed image converted to HSL colorspace. I combined magnitude and direction thresholds for L -layer, simple S-layer thresholding, magnitude and direction thresholds for S-layer using functions `mag_thresh`, `dir_threshold` and `layer_threshold` defined in `functions.py`. Also I masked out shadowed image parts with L-value less than `30` as not reliable sources for thresholding using `layer_threshold` function.
 Result thresholded image is formed using this formula 
 ```python 
-combined_binary[((s_binary == 1) | (((s_mag_binary == 1) & (s_dir_binary == 1)) | (s_gradx == 1)) | (
-            (l_mag_binary == 1) & (l_dir_binary == 1))) & (shadow_area == 0)] = 1 
+combined_binary[((s_binary == 1) | (((s_mag_binary == 1) & (s_dir_binary == 1)) ) | (
+            (l_mag_binary == 1) & (l_dir_binary == 1))) & (shadow_area == 0)] = 1
 ```
 From hereon I will not mention where function is defined as all of them are stored in `functions.py` file
 This is an example of thresholded binary image:
