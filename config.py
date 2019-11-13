@@ -11,7 +11,7 @@ error_poly_cant_fit = "Failed to fit a poly for line!"
 error_lines_insane = "Lines failed sanity check!"
 
 interp_len = 50  # number of frames in interpolation sequence
-spline_smoothing = (interp_len - np.sqrt(2 * interp_len)) *10
+spline_smoothing = (interp_len - np.sqrt(2 * interp_len)) *100
 ym_per_pix = 30 / 720  # meters per pixel in y dimension
 xm_per_pix = 3.7 / 700  # meters per pixel in x dimension
 #number of frames for averaging curvature

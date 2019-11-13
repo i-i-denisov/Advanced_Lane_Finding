@@ -20,16 +20,16 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./writeup/undistorted.png "Undistorted"
-[image2]: ./writeup/undistorted.jpg "Road Transformed"
-[image3]: ./writeup/combined_binary.jpg "Binary Example"
-[image4]: ./writeup/warp.png "Warp Example"
-[image5]: ./writeup/warped_lines_drawn.jpg "Fit Visual"
-[image6]: ./writeup/result.jpg "Output"
-[image7]: ./writeup/554_Figure_1.png
-[image8]: ./writeup/project554.jpg
-[image9]: ./writeup/histogram.png
-[video1]: /writeup/project_video.avi "Video"
+[image1]: ./Writeup/Undistorted.png "Undistorted"
+[image2]: ./Writeup/undistorted.jpg "Road Transformed"
+[image3]: ./Writeup/combined_binary.jpg "Binary Example"
+[image4]: ./Writeup/warp.png "Warp Example"
+[image5]: ./Writeup/warped_lines_drawn.jpg "Fit Visual"
+[image6]: ./Writeup/result.jpg "Output"
+[image7]: ./Writeup/554_Figure_1.png
+[image8]: ./Writeup/project554.jpg
+[image9]: ./Writeup/Histogram.png
+[video1]: /Writeup/project_video.avi "Video"
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
 

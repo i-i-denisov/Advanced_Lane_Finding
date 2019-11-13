@@ -410,7 +410,7 @@ def sanity_check(left_line, right_line):
                   max_dist, " Min distance ", min_dist)
             return left_line, right_line
         #checking if lines are well-bound
-        well_bound=(max_dist < 610) & (min_dist > 500)
+        well_bound=(max_dist < 700) & (min_dist > 500)
         #checking that lines have similar curvature
         if ((a > 10) | (a < 0.1) | (b > 10) | (b < 0.1)) & (not well_bound) :
             left_line.detected = False
