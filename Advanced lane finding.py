@@ -14,8 +14,6 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import numpy as np
 import cv2
-# from IPython import get_ipython
-# get_ipython().run_line_magic('matplotlib', 'inline')
 
 import functions
 
@@ -49,20 +47,9 @@ if out.isOpened():
         if not ret:
             break
         else:
-            #if config.frame_number > 600:
-             # break
-            # problem_image=frame
-            #if (config.frame_number >= 0) & (config.frame_number < 100) & (config.frame_number != 4):
             processed_frame, left_line, right_line = functions.process_image(frame, left_line, right_line, config.interp_len)
             processed_frames += 1
-            #cv2.imwrite("./extracted_images/challenge"+str(config.frame_number)+'.jpg', frame)
             out.write(processed_frame)
-            # debug
-            #if config.frame_number == 4 :
-            #    processed_frame, left_line, right_line = functions.process_image(frame, left_line, right_line, config.interp_len, visualise=True)
-            #    problem_image = frame
-            #    out.write (processed_frame)
-            #    processed_frames += 1
             config.frame_number += 1
 cap.release()
 out.release()
